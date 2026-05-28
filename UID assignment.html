@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BooksToHome</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#f7f8fa;
+}
+
+.container{
+width:90%;
+max-width:1300px;
+margin:auto;
+}
+
+/* HEADER */
+
+header{
+background:#1f2937;
+padding:15px 0;
+position:sticky;
+top:0;
+z-index:100;
+}
+
+.header-content{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:20px;
+}
+
+.logo{
+font-size:30px;
+font-weight:bold;
+color:white;
+text-decoration:none;
+}
+
+.logo span{
+color:#ef4444;
+}
+
+.search-box{
+display:flex;
+flex:1;
+max-width:500px;
+}
+
+.search-box input{
+flex:1;
+padding:12px;
+border:none;
+outline:none;
+border-radius:8px 0 0 8px;
+}
+
+.search-box button{
+padding:12px 20px;
+border:none;
+background:#ef4444;
+color:white;
+cursor:pointer;
+border-radius:0 8px 8px 0;
+}
+
+.header-links{
+display:flex;
+gap:20px;
+color:white;
+font-size:20px;
+cursor:pointer;
+}
+
+/* NAV */
+
+nav{
+background:#374151;
+padding:14px;
+}
+
+nav ul{
+display:flex;
+justify-content:center;
+list-style:none;
+gap:35px;
+}
+
+nav a{
+color:white;
+text-decoration:none;
+}
+
+/* HERO */
+
+.hero{
+height:500px;
+
+background:
+linear-gradient(
+rgba(0,0,0,.6),
+rgba(0,0,0,.6)
+),
+
+url(
+'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1500'
+);
+
+background-size:cover;
+background-position:center;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+text-align:center;
+
+color:white;
+}
+
+.hero h1{
+font-size:55px;
+margin-bottom:20px;
+}
+
+.hero p{
+font-size:20px;
+margin-bottom:25px;
+}
+
+.btn{
+padding:14px 28px;
+background:#ef4444;
+border:none;
+color:white;
+border-radius:8px;
+cursor:pointer;
+text-decoration:none;
+display:inline-block;
+}
+
+/* SECTION */
+
+.section{
+padding:70px 0;
+}
+
+.section-title{
+font-size:35px;
+text-align:center;
+margin-bottom:40px;
+}
+
+/* BOOK GRID */
+
+.books-grid{
+display:grid;
+grid-template-columns:
+repeat(
+auto-fit,
+minmax(250px,1fr)
+);
+
+gap:25px;
+}
+
+.book-card{
+background:white;
+border-radius:15px;
+overflow:hidden;
+
+box-shadow:
+0 8px 20px
+rgba(0,0,0,.08);
+
+transition:.3s;
+}
+
+.book-card:hover{
+transform:translateY(-8px);
+}
+
+.book-image img{
+width:100%;
+height:320px;
+object-fit:cover;
+}
+
+.book-info{
+padding:15px;
+}
+
+.book-category{
+color:#ef4444;
+font-size:12px;
+font-weight:bold;
+}
+
+.book-title{
+font-size:18px;
+font-weight:700;
+margin:10px 0;
+}
+
+.book-author{
+color:gray;
+}
+
+.rating{
+color:orange;
+margin-top:8px;
+}
+
+.book-price{
+font-size:22px;
+font-weight:bold;
+margin-top:10px;
+}
+
+.book-actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.add-cart-btn{
+flex:1;
+padding:10px;
+border:none;
+background:#ef4444;
+color:white;
+border-radius:8px;
+cursor:pointer;
+}
+
+.wishlist-btn{
+width:45px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* FEATURES */
+
+.features{
+background:white;
+padding:60px 0;
+}
+
+.features-grid{
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+
+gap:20px;
+text-align:center;
+}
+
+.feature{
+padding:20px;
+}
+
+/* NEWSLETTER */
+
+.newsletter{
+background:#1f2937;
+padding:60px;
+text-align:center;
+color:white;
+}
+
+.newsletter input{
+padding:12px;
+width:300px;
+}
+
+/* FOOTER */
+
+footer{
+background:#111827;
+padding:30px;
+color:white;
+text-align:center;
+}
+
+/* TOAST */
+
+.toast{
+position:fixed;
+right:20px;
+bottom:20px;
+
+background:#22c55e;
+color:white;
+
+padding:15px 20px;
+
+border-radius:8px;
+
+display:none;
+}
+
+.toast.show{
+display:block;
+}
+
+@media(max-width:768px){
+
+.header-content{
+flex-direction:column;
+}
+
+nav ul{
+flex-wrap:wrap;
+}
+
+.hero h1{
+font-size:35px;
+}
+
+.features-grid{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="container">
+
+<div class="header-content">
+
+<a class="logo">
+Books<span>ToHome</span>
+</a>
+
+<div class="search-box">
+
+<input
+id="searchInput"
+placeholder="Search books..."
+>
+
+<button onclick="searchBooks()">
+Search
+</button>
+
+</div>
+
+<div class="header-links">
+
+<div>
+❤️
+<span id="wishlistCount">
+0
+</span>
+</div>
+
+<div>
+🛒
+<span id="cartCount">
+0
+</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+<nav>
+
+<ul>
+
+<li><a href="#">Home</a></li>
+
+<li><a href="#books">
+Books
+</a></li>
+
+<li><a href="#best">
+Bestsellers
+</a></li>
+
+<li><a href="#new">
+New
+</a></li>
+
+</ul>
+
+</nav>
+
+<section class="hero">
+
+<div>
+
+<h1>
+Find Your Perfect Book
+</h1>
+
+<p>
+Millions of books delivered
+to your doorstep
+</p>
+
+<a href="#books" class="btn">
+Shop Now
+</a>
+
+</div>
+
+</section>
+
+<section
+class="section"
+id="books">
+
+<div class="container">
+
+<h2 class="section-title">
+Featured Books
+</h2>
+
+<div
+class="books-grid"
+id="booksGrid">
+
+</div>
+
+</div>
+
+</section>
+
+<section
+class="section"
+id="best">
+
+<div class="container">
+
+<h2 class="section-title">
+
+Bestsellers
+
+</h2>
+
+<div
+class="books-grid"
+id="bestGrid">
+
+</div>
+
+</div>
+
+</section>
+
+<section
+class="section"
+id="new">
+
+<div class="container">
+
+<h2 class="section-title">
+
+New Arrivals
+
+</h2>
+
+<div
+class="books-grid"
+id="newGrid">
+
+</div>
+
+</div>
+
+</section>
+
+<section class="features">
+
+<div class="container">
+
+<div class="features-grid">
+
+<div class="feature">
+🚚
+<h3>
+Free Delivery
+</h3>
+</div>
+
+<div class="feature">
+🔒
+<h3>
+Secure Payment
+</h3>
+</div>
+
+<div class="feature">
+📞
+<h3>
+24/7 Support
+</h3>
+</div>
+
+<div class="feature">
+↩️
+<h3>
+Easy Returns
+</h3>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<section class="newsletter">
+
+<h2>
+Subscribe Newsletter
+</h2>
+
+<br>
+
+<input placeholder="Email">
+
+<button class="btn">
+
+Subscribe
+
+</button>
+
+</section>
+
+<footer>
+
+© 2026 BooksToHome
+
+</footer>
+
+<div class="toast"
+id="toast">
+
+Added Successfully
+
+</div>
+
+<script>
+
+const books=[
+
+{
+title:"Atomic Habits",
+author:"James Clear",
+category:"Self Help",
+price:"₹399",
+rating:"★★★★★",
+image:
+"https://images-na.ssl-images-amazon.com/images/I/91bYsX41DVL.jpg"
+},
+
+{
+title:"Ikigai",
+author:"Hector Garcia",
+category:"Motivation",
+price:"₹350",
+rating:"★★★★★",
+image:
+"https://images-na.ssl-images-amazon.com/images/I/81l3rZK4lnL.jpg"
+},
+
+{
+title:"Harry Potter",
+author:"J K Rowling",
+category:"Fiction",
+price:"₹599",
+rating:"★★★★★",
+image:
+"https://images-na.ssl-images-amazon.com/images/I/81iqZ2HHD-L.jpg"
+},
+
+{
+title:"Rich Dad Poor Dad",
+author:"Robert Kiyosaki",
+category:"Finance",
+price:"₹299",
+rating:"★★★★★",
+image:
+"https://images-na.ssl-images-amazon.com/images/I/81bsw6fnUiL.jpg"
+},
+
+{
+title:"The Alchemist",
+author:"Paulo Coelho",
+category:"Fiction",
+price:"₹280",
+rating:"★★★★★",
+image:
+"https://images-na.ssl-images-amazon.com/images/I/71aFt4+OTOL.jpg"
+},
+
+{
+title:"Psychology Of Money",
+author:"Morgan Housel",
+category:"Finance",
+price:"₹450",
+rating:"★★★★★",
+image:
+"https://images-na.ssl-images-amazon.com/images/I/71g2ednj0JL.jpg"
+}
+
+];
+
+let cart=0;
+let wish=0;
+
+function render(data,id){
+
+let html="";
+
+data.forEach(book=>{
+
+html+=`
+
+<div class="book-card">
+
+<div class="book-image">
+
+<img src="${book.image}">
+
+</div>
+
+<div class="book-info">
+
+<div class="book-category">
+
+${book.category}
+
+</div>
+
+<div class="book-title">
+
+${book.title}
+
+</div>
+
+<div class="book-author">
+
+${book.author}
+
+</div>
+
+<div class="rating">
+
+${book.rating}
+
+</div>
+
+<div class="book-price">
+
+${book.price}
+
+</div>
+
+<div class="book-actions">
+
+<button
+class="add-cart-btn"
+
+onclick="addCart()">
+
+Add Cart
+
+</button>
+
+<button
+class="wishlist-btn"
+
+onclick="addWish()">
+
+❤️
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById(
+id
+).innerHTML=html;
+
+}
+
+render(
+books,
+"booksGrid"
+);
+
+render(
+books.slice(0,3),
+"bestGrid"
+);
+
+render(
+books.slice(3),
+"newGrid"
+);
+
+function addCart(){
+
+cart++;
+
+document.getElementById(
+"cartCount"
+).innerText=cart;
+
+toast();
+
+}
+
+function addWish(){
+
+wish++;
+
+document.getElementById(
+"wishlistCount"
+).innerText=wish;
+
+toast();
+
+}
+
+function searchBooks(){
+
+let text=
+
+document
+.getElementById(
+"searchInput"
+)
+
+.value
+
+.toLowerCase();
+
+let filtered=
+
+books.filter(
+
+b=>
+
+b.title
+.toLowerCase()
+
+.includes(text)
+
+||
+
+b.author
+.toLowerCase()
+
+.includes(text)
+
+);
+
+render(
+filtered,
+"booksGrid"
+);
+
+}
+
+function toast(){
+
+let t=
+document.getElementById(
+"toast"
+);
+
+t.classList.add(
+"show"
+);
+
+setTimeout(()=>{
+
+t.classList.remove(
+"show"
+);
+
+},1500);
+
+}
+
+</script>
+
+</body>
+</html>
